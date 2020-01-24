@@ -12,27 +12,35 @@ import java.time.*;
 
 public class Calculator {
     
-    public String file_path = "Accounts.txt";
-    public String log_path = "Log.txt";
-    public String accounts = null;
+    private String accounts_path;
+    private String log_path;
+
     private Person[] persons;
     private Person person_paid;
     private Person[] persons_in;
+
+    private int value_total;
+    private int value_each;
+
+    public Calculator(String accounts_path, String log_path) {
+        this.accounts_path = accounts_path;
+        this.log_path = log_path;
+    }
     
     public void calculate() {
         while(true) {
             persons = getPersons();
-            int value_total = getValuePaid();
+            value_total = getValuePaid();
 
             person_paid = getPersonPaid();
             persons_in = getPersonsIn();
 
-            int value_each = costForPerson(value_total);
+            value_each = costForPerson();
 
-            makeTransaction(value_each);
+            makeTransaction();
 
             savePersons();
-            saveTransaction(value_total, value_each);
+            saveTransaction();
         }
     }
 
@@ -50,23 +58,20 @@ public class Calculator {
         return persons_in;
     }
 
-    private void makeTransaction(int value_each) {
+    private void makeTransaction() {
         for (int i = 0; i < persons_in.length; i++) {
             persons_in[i].Subtract(value_each);
         }
         person_paid.Add(value_each * persons_in.length);
     }
 
-    private void saveTransaction(int value_total, int value_each) {
+    private void saveTransaction() {
         try {
             FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
             BufferedWriter writer = new BufferedWriter(fileOpener);
             
             Date date = new Date();
             LocalDate localDate = date.toInstant().atZone(ZoneId.of("Iran")).toLocalDate();
-            // int year  = localDate.getYear();
-            // int month = localDate.getMonthValue();
-            // int day   = localDate.getDayOfMonth();
             
             writer.write("\n" + localDate + "\t" + value_total + "\r\n");
             writer.write(person_paid.name + "\t" +  "+ " + value_each * persons_in.length + "\r\n");
@@ -84,7 +89,7 @@ public class Calculator {
 
     private void savePersons() {
         try {
-            FileWriter fileOpener = new FileWriter(Paths.get(file_path).toString());
+            FileWriter fileOpener = new FileWriter(Paths.get(accounts_path).toString());
             BufferedWriter writer = new BufferedWriter(fileOpener);
             
             for(int i = 0; i < persons.length; i++) {
@@ -98,7 +103,7 @@ public class Calculator {
         }
     }
 
-    private int costForPerson(int value_total) {
+    private int costForPerson() {
         return (int) Math.ceil((value_total / (persons_in.length + 1)) / 100f) * 100;
     }
 
@@ -130,7 +135,7 @@ public class Calculator {
         ArrayList<Person> persons = new ArrayList<Person>();
 
         try {
-            FileReader fileOpener = new FileReader(Paths.get(this.file_path).toString());
+            FileReader fileOpener = new FileReader(Paths.get(this.accounts_path).toString());
             BufferedReader reader = new BufferedReader(fileOpener);
             while(true){
                 String line = reader.readLine();
