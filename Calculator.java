@@ -58,28 +58,32 @@ public class Calculator {
             savePersons();
 
             // write log
-            try {
-                FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
-                BufferedWriter writer = new BufferedWriter(fileOpener);
-                
-                Date date = new Date();
-                LocalDate localDate = date.toInstant().atZone(ZoneId.of("Iran")).toLocalDate();
-                int year  = localDate.getYear();
-                int month = localDate.getMonthValue();
-                int day   = localDate.getDayOfMonth();
-                
-                writer.write("\n" + localDate + "\t" + value_total + "\r\n");
-                writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
-                for (int i = 0; i < num_persons; i++) {
-                    Person p = persons.get(indexes[i]);
-                    writer.write(p.name + "\t" + "- " + value_each + "\r\n");
-                }
-                writer.write("\n===============================================================\n");
-                writer.close();
-                fileOpener.close();
-            } catch (IOException e) {
-                System.out.println(e);
+            saveTransaction(person_paid, indexes, num_persons);
+        }
+    }
+
+    private void saveTransaction(Person person_paid, int[] indexes, int num_persons) {
+        try {
+            FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
+            BufferedWriter writer = new BufferedWriter(fileOpener);
+            
+            Date date = new Date();
+            LocalDate localDate = date.toInstant().atZone(ZoneId.of("Iran")).toLocalDate();
+            int year  = localDate.getYear();
+            int month = localDate.getMonthValue();
+            int day   = localDate.getDayOfMonth();
+            
+            writer.write("\n" + localDate + "\t" + value_total + "\r\n");
+            writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
+            for (int i = 0; i < num_persons; i++) {
+                Person p = persons.get(indexes[i]);
+                writer.write(p.name + "\t" + "- " + value_each + "\r\n");
             }
+            writer.write("\n===============================================================\n");
+            writer.close();
+            fileOpener.close();
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 
