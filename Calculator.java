@@ -37,7 +37,7 @@ public class Calculator {
 
 
             // find who paid and add
-            Person person_paid = persons.get(Integer.parseInt(JOptionPane.showInputDialog(null, "who paid?" + getPersonsList())));
+            Person person_paid = persons.get(findPersonPaidIndex());
 
             // find who should pay and subtract
             String[] indexes = JOptionPane.showInputDialog(null, "who should paid?" + getPersonsList()).split(" ");
@@ -92,6 +92,10 @@ public class Calculator {
                 System.out.println(e);
             }
         }
+    }
+
+    private int findPersonPaidIndex() {
+        return Integer.parseInt(JOptionPane.showInputDialog(null, "who paid?" + getPersonsList()));
     }
 
     private String getPersonsList() {
