@@ -20,19 +20,17 @@ public class Calculator {
     public String file_path = "Accounts.txt";
     public String log_path = "Log.txt";
     public String accounts = null;
-    public ArrayList<Person> persons = new ArrayList<Person>();
+    private Person[] persons;
     
     public int value_each;
     
     public Calculator() {
-
+        
         while(true) {
-            persons = new ArrayList<Person>();
-            getPersons();
-
+            persons = getPersons();
             int value_total = getValuePaid();
 
-            Person person_paid = persons.get(findPersonPaidIndex());
+            Person person_paid = persons[findPersonPaidIndex()];
 
             int[] indexes = getWhoShouldPayIndexes();
             int num_persons = indexes.length;
@@ -40,7 +38,7 @@ public class Calculator {
             value_each = costForPerson(num_persons, value_total);
 
             for (int i = 0; i < num_persons; i++) {
-                persons.get(indexes[i]).Subtract(value_each);
+                persons[indexes[i]].Subtract(value_each);
             }
             person_paid.Add(value_each * num_persons);
 
@@ -63,7 +61,7 @@ public class Calculator {
             writer.write("\n" + localDate + "\t" + value_total + "\r\n");
             writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
             for (int i = 0; i < num_persons; i++) {
-                Person p = persons.get(indexes[i]);
+                Person p = persons[indexes[i]];
                 writer.write(p.name + "\t" + "- " + value_each + "\r\n");
             }
             writer.write("\n===============================================================\n");
@@ -79,8 +77,8 @@ public class Calculator {
             FileWriter fileOpener = new FileWriter(Paths.get(file_path).toString());
             BufferedWriter writer = new BufferedWriter(fileOpener);
             
-            for(int i = 0; i < persons.size(); i++) {
-                Person p = persons.get(i);
+            for(int i = 0; i < persons.length; i++) {
+                Person p = persons[i];
                 writer.write(p.name + "\t" + p.money + "\r\n");
             }
             writer.close();
@@ -109,8 +107,8 @@ public class Calculator {
 
     private String getPersonsList() {
         String message = "";
-        for(int i = 0; i < persons.size(); i++)
-            message += "\n " + i + ". " + persons.get(i).name;
+        for(int i = 0; i < persons.length; i++)
+            message += "\n " + i + ". " + persons[i].name;
         return message;
     }
 
@@ -118,7 +116,9 @@ public class Calculator {
         return Integer.parseInt(JOptionPane.showInputDialog(null, "total value paid?"));
     }
 
-    private void getPersons() {
+    private Person[] getPersons() {
+        ArrayList<Person> persons = new ArrayList<Person>();
+
         try {
             FileReader fileOpener = new FileReader(Paths.get(this.file_path).toString());
             BufferedReader reader = new BufferedReader(fileOpener);
@@ -134,6 +134,11 @@ public class Calculator {
         } catch (IOException e) {
             System.out.println(e);
         }
+        Person[] persons_array = new Person[persons.size()];
+        for (int i = 0; i < persons.size(); i++) {
+            persons_array[i] = (Person) persons.get(i);
+        }
+        return persons_array;
     }
 
 
