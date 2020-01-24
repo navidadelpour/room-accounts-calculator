@@ -2,8 +2,8 @@ akbar	0
 saeed	0
 pouya	0
 amir	0
-navid	-13700
-alireza	0
-saleh	27400
-poorya	-13700
+navid	0
+alireza 0
+saleh	0
+poorya  0
 varmini	0

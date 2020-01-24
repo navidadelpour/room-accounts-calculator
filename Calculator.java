@@ -31,14 +31,10 @@ public class Calculator {
         while(true) {
             persons = getPersons();
             value_total = getValuePaid();
-
             person_paid = getPersonPaid();
             persons_in = getPersonsIn();
-
             value_each = costForPerson();
-
             makeTransaction();
-
             savePersons();
             saveTransaction();
         }
@@ -53,7 +49,7 @@ public class Calculator {
         int[] indexes = getWhoShouldPayIndexes();
         Person[] persons_in = new Person[indexes.length];
         for (int i = 0; i < indexes.length; i++) {
-            persons_in[indexes[i]] = persons_in[i];
+            persons_in[i] = persons[indexes[i]];
         }
         return persons_in;
     }
