@@ -1,13 +1,8 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
@@ -52,9 +47,9 @@ public class Calculator {
             
             Date date = new Date();
             LocalDate localDate = date.toInstant().atZone(ZoneId.of("Iran")).toLocalDate();
-            int year  = localDate.getYear();
-            int month = localDate.getMonthValue();
-            int day   = localDate.getDayOfMonth();
+            // int year  = localDate.getYear();
+            // int month = localDate.getMonthValue();
+            // int day   = localDate.getDayOfMonth();
             
             writer.write("\n" + localDate + "\t" + value_total + "\r\n");
             writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
