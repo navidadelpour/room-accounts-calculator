@@ -41,17 +41,18 @@ public class Calculator {
 
             // find who should pay and subtract
             int[] indexes = getWhoShouldPayIndexes();
-
+            int num_persons = indexes.length;
+            
             // calculate the value for each person
-            value_each = (int) Math.ceil((value_total / (indexes.length + 1)) / 100f) * 100;
+            value_each = costForPerson(num_persons);
 
             // subtract who should pay
-            for (int i = 0; i < indexes.length; i++) {
+            for (int i = 0; i < num_persons; i++) {
                 persons.get(indexes[i]).Subtract(value_each);
             }
 
             // add to person should get
-            person_paid.Add(value_each * indexes.length);
+            person_paid.Add(value_each * num_persons);
 
             // write file
             try {
@@ -80,8 +81,8 @@ public class Calculator {
                 int day   = localDate.getDayOfMonth();
                 
                 writer.write("\n" + localDate + "\t" + value_total + "\r\n");
-                writer.write(person_paid.name + "\t" +  "+ " + value_each * indexes.length + "\r\n");
-                for (int i = 0; i < indexes.length; i++) {
+                writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
+                for (int i = 0; i < num_persons; i++) {
                     Person p = persons.get(indexes[i]);
                     writer.write(p.name + "\t" + "- " + value_each + "\r\n");
                 }
@@ -92,6 +93,10 @@ public class Calculator {
                 System.out.println(e);
             }
         }
+    }
+
+    private int costForPerson(int num) {
+        return (int) Math.ceil((value_total / (num + 1)) / 100f) * 100;
     }
 
     private int[] getWhoShouldPayIndexes() {
