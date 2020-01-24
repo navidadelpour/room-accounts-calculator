@@ -29,35 +29,23 @@ public class Calculator {
 
         while(true) {
             persons = new ArrayList<Person>();
-            // readFile and save person data
             getPersons();
 
-            // get value paid
             value_total = getValuePaid();
 
-
-            // find who paid and add
             Person person_paid = persons.get(findPersonPaidIndex());
 
-            // find who should pay and subtract
             int[] indexes = getWhoShouldPayIndexes();
             int num_persons = indexes.length;
 
-            // calculate the value for each person
             value_each = costForPerson(num_persons);
 
-            // subtract who should pay
             for (int i = 0; i < num_persons; i++) {
                 persons.get(indexes[i]).Subtract(value_each);
             }
-
-            // add to person should get
             person_paid.Add(value_each * num_persons);
 
-            // write file
             savePersons();
-
-            // write log
             saveTransaction(person_paid, indexes, num_persons);
         }
     }
