@@ -19,8 +19,7 @@ public class Calculator {
     private Person person_paid;
     private Person[] persons_in;
     
-    public Calculator() {
-        
+    public void calculate() {
         while(true) {
             persons = getPersons();
             int value_total = getValuePaid();
