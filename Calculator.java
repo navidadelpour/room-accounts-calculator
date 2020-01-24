@@ -33,7 +33,7 @@ public class Calculator {
             getPersons();
 
             // get value paid
-            value_total = Integer.parseInt(JOptionPane.showInputDialog(null, "total value paid?"));
+            value_total = getValuePaid();
 
 
             // find who paid and add
@@ -98,6 +98,10 @@ public class Calculator {
                 System.out.println(e);
             }
         }
+    }
+
+    private int getValuePaid() {
+        return Integer.parseInt(JOptionPane.showInputDialog(null, "total value paid?"));
     }
 
     private void getPersons() {
