@@ -37,16 +37,10 @@ public class Calculator {
 
 
             // find who paid and add
-            String message = "who paid?";
-            for(int i = 0; i < persons.size(); i++)
-                message += "\n " + i + ". " + persons.get(i).name; 
-            Person person_paid = persons.get(Integer.parseInt(JOptionPane.showInputDialog(null, message)));
+            Person person_paid = persons.get(Integer.parseInt(JOptionPane.showInputDialog(null, "who paid?" + getPersonsList())));
 
             // find who should pay and subtract
-            message = "who should paid?";
-            for(int i = 0; i < persons.size(); i++)
-                message += "\n " + i + ". " + persons.get(i).name; 
-            String[] indexes = JOptionPane.showInputDialog(null, message).split(" ");
+            String[] indexes = JOptionPane.showInputDialog(null, "who should paid?" + getPersonsList()).split(" ");
 
             // calculate the value for each person
             value_each = (int) Math.ceil((value_total / (indexes.length + 1)) / 100f) * 100;
@@ -98,6 +92,13 @@ public class Calculator {
                 System.out.println(e);
             }
         }
+    }
+
+    private String getPersonsList() {
+        String message = "";
+        for(int i = 0; i < persons.size(); i++)
+            message += "\n " + i + ". " + persons.get(i).name;
+        return message;
     }
 
     private int getValuePaid() {
