@@ -16,6 +16,8 @@ public class Calculator {
     public String log_path = "Log.txt";
     public String accounts = null;
     private Person[] persons;
+    private Person person_paid;
+    private Person[] persons_in;
     
     public Calculator() {
         
@@ -23,28 +25,40 @@ public class Calculator {
             persons = getPersons();
             int value_total = getValuePaid();
 
-            Person person_paid = persons[findPersonPaidIndex()];
+            person_paid = getPersonPaid();
+            persons_in = getPersonsIn();
 
-            int[] indexes = getWhoShouldPayIndexes();
-            int num_persons = indexes.length;
+            int value_each = costForPerson(value_total);
 
-            int value_each = costForPerson(num_persons, value_total);
-
-            makeTransaction(person_paid, indexes, num_persons, value_each);
+            makeTransaction(value_each);
 
             savePersons();
-            saveTransaction(person_paid, indexes, num_persons, value_total, value_each);
+            saveTransaction(value_total, value_each);
         }
     }
 
-    private void makeTransaction(Person person_paid, int[] indexes, int num_persons, int value_each) {
-        for (int i = 0; i < num_persons; i++) {
-            persons[indexes[i]].Subtract(value_each);
-        }
-        person_paid.Add(value_each * num_persons);
+    private Person getPersonPaid() {
+        int index = findPersonPaidIndex();
+        return persons[index];
     }
 
-    private void saveTransaction(Person person_paid, int[] indexes, int num_persons, int value_total, int value_each) {
+    private Person[] getPersonsIn() {
+        int[] indexes = getWhoShouldPayIndexes();
+        Person[] persons_in = new Person[indexes.length];
+        for (int i = 0; i < indexes.length; i++) {
+            persons_in[indexes[i]] = persons_in[i];
+        }
+        return persons_in;
+    }
+
+    private void makeTransaction(int value_each) {
+        for (int i = 0; i < persons_in.length; i++) {
+            persons_in[i].Subtract(value_each);
+        }
+        person_paid.Add(value_each * persons_in.length);
+    }
+
+    private void saveTransaction(int value_total, int value_each) {
         try {
             FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
             BufferedWriter writer = new BufferedWriter(fileOpener);
@@ -56,9 +70,9 @@ public class Calculator {
             // int day   = localDate.getDayOfMonth();
             
             writer.write("\n" + localDate + "\t" + value_total + "\r\n");
-            writer.write(person_paid.name + "\t" +  "+ " + value_each * num_persons + "\r\n");
-            for (int i = 0; i < num_persons; i++) {
-                Person p = persons[indexes[i]];
+            writer.write(person_paid.name + "\t" +  "+ " + value_each * persons_in.length + "\r\n");
+            for (int i = 0; i < persons_in.length; i++) {
+                Person p = persons_in[i];
                 writer.write(p.name + "\t" + "- " + value_each + "\r\n");
             }
             writer.write("\n===============================================================\n");
@@ -85,8 +99,8 @@ public class Calculator {
         }
     }
 
-    private int costForPerson(int num, int value_total) {
-        return (int) Math.ceil((value_total / (num + 1)) / 100f) * 100;
+    private int costForPerson(int value_total) {
+        return (int) Math.ceil((value_total / (persons_in.length + 1)) / 100f) * 100;
     }
 
     private int[] getWhoShouldPayIndexes() {
