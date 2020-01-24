@@ -42,7 +42,7 @@ public class Calculator {
             // find who should pay and subtract
             int[] indexes = getWhoShouldPayIndexes();
             int num_persons = indexes.length;
-            
+
             // calculate the value for each person
             value_each = costForPerson(num_persons);
 
@@ -55,19 +55,7 @@ public class Calculator {
             person_paid.Add(value_each * num_persons);
 
             // write file
-            try {
-                FileWriter fileOpener = new FileWriter(Paths.get(file_path).toString());
-                BufferedWriter writer = new BufferedWriter(fileOpener);
-                
-                for(int i = 0; i < persons.size(); i++) {
-                    Person p = persons.get(i);
-                    writer.write(p.name + "\t" + p.money + "\r\n");
-                }
-                writer.close();
-                fileOpener.close();
-            } catch (IOException e) {
-                System.out.println(e);
-            }
+            savePersons();
 
             // write log
             try {
@@ -92,6 +80,22 @@ public class Calculator {
             } catch (IOException e) {
                 System.out.println(e);
             }
+        }
+    }
+
+    private void savePersons() {
+        try {
+            FileWriter fileOpener = new FileWriter(Paths.get(file_path).toString());
+            BufferedWriter writer = new BufferedWriter(fileOpener);
+            
+            for(int i = 0; i < persons.size(); i++) {
+                Person p = persons.get(i);
+                writer.write(p.name + "\t" + p.money + "\r\n");
+            }
+            writer.close();
+            fileOpener.close();
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 
