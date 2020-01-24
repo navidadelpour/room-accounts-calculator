@@ -30,21 +30,7 @@ public class Calculator {
         while(true) {
             persons = new ArrayList<Person>();
             // readFile and save person data
-            try {
-                FileReader fileOpener = new FileReader(Paths.get(this.file_path).toString());
-                BufferedReader reader = new BufferedReader(fileOpener);
-                while(true){
-                    String line = reader.readLine();
-                    if(line == null)
-                        break;
-                    String[] data = line.split("\\t");
-                    persons.add(new Person(data[0], Integer.parseInt(data[1])));
-                }
-                reader.close();
-                fileOpener.close();
-            } catch (IOException e) {
-                System.out.println(e);
-            }
+            getPersons();
 
             // get value paid
             value_total = Integer.parseInt(JOptionPane.showInputDialog(null, "total value paid?"));
@@ -111,6 +97,24 @@ public class Calculator {
             } catch (IOException e) {
                 System.out.println(e);
             }
+        }
+    }
+
+    private void getPersons() {
+        try {
+            FileReader fileOpener = new FileReader(Paths.get(this.file_path).toString());
+            BufferedReader reader = new BufferedReader(fileOpener);
+            while(true){
+                String line = reader.readLine();
+                if(line == null)
+                    break;
+                String[] data = line.split("\\t");
+                persons.add(new Person(data[0], Integer.parseInt(data[1])));
+            }
+            reader.close();
+            fileOpener.close();
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 
