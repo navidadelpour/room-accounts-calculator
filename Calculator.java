@@ -30,14 +30,18 @@ public class Calculator {
 
             int value_each = costForPerson(num_persons, value_total);
 
-            for (int i = 0; i < num_persons; i++) {
-                persons[indexes[i]].Subtract(value_each);
-            }
-            person_paid.Add(value_each * num_persons);
+            makeTransaction(person_paid, indexes, num_persons, value_each);
 
             savePersons();
             saveTransaction(person_paid, indexes, num_persons, value_total, value_each);
         }
+    }
+
+    private void makeTransaction(Person person_paid, int[] indexes, int num_persons, int value_each) {
+        for (int i = 0; i < num_persons; i++) {
+            persons[indexes[i]].Subtract(value_each);
+        }
+        person_paid.Add(value_each * num_persons);
     }
 
     private void saveTransaction(Person person_paid, int[] indexes, int num_persons, int value_total, int value_each) {
