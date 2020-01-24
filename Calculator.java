@@ -22,7 +22,6 @@ public class Calculator {
     public String accounts = null;
     public ArrayList<Person> persons = new ArrayList<Person>();
     
-    public int value_total;
     public int value_each;
     
     public Calculator() {
@@ -31,14 +30,14 @@ public class Calculator {
             persons = new ArrayList<Person>();
             getPersons();
 
-            value_total = getValuePaid();
+            int value_total = getValuePaid();
 
             Person person_paid = persons.get(findPersonPaidIndex());
 
             int[] indexes = getWhoShouldPayIndexes();
             int num_persons = indexes.length;
 
-            value_each = costForPerson(num_persons);
+            value_each = costForPerson(num_persons, value_total);
 
             for (int i = 0; i < num_persons; i++) {
                 persons.get(indexes[i]).Subtract(value_each);
@@ -46,11 +45,11 @@ public class Calculator {
             person_paid.Add(value_each * num_persons);
 
             savePersons();
-            saveTransaction(person_paid, indexes, num_persons);
+            saveTransaction(person_paid, indexes, num_persons, value_total);
         }
     }
 
-    private void saveTransaction(Person person_paid, int[] indexes, int num_persons) {
+    private void saveTransaction(Person person_paid, int[] indexes, int num_persons, int value_total) {
         try {
             FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
             BufferedWriter writer = new BufferedWriter(fileOpener);
@@ -91,7 +90,7 @@ public class Calculator {
         }
     }
 
-    private int costForPerson(int num) {
+    private int costForPerson(int num, int value_total) {
         return (int) Math.ceil((value_total / (num + 1)) / 100f) * 100;
     }
 
