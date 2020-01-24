@@ -22,8 +22,6 @@ public class Calculator {
     public String accounts = null;
     private Person[] persons;
     
-    public int value_each;
-    
     public Calculator() {
         
         while(true) {
@@ -35,7 +33,7 @@ public class Calculator {
             int[] indexes = getWhoShouldPayIndexes();
             int num_persons = indexes.length;
 
-            value_each = costForPerson(num_persons, value_total);
+            int value_each = costForPerson(num_persons, value_total);
 
             for (int i = 0; i < num_persons; i++) {
                 persons[indexes[i]].Subtract(value_each);
@@ -43,11 +41,11 @@ public class Calculator {
             person_paid.Add(value_each * num_persons);
 
             savePersons();
-            saveTransaction(person_paid, indexes, num_persons, value_total);
+            saveTransaction(person_paid, indexes, num_persons, value_total, value_each);
         }
     }
 
-    private void saveTransaction(Person person_paid, int[] indexes, int num_persons, int value_total) {
+    private void saveTransaction(Person person_paid, int[] indexes, int num_persons, int value_total, int value_each) {
         try {
             FileWriter fileOpener = new FileWriter(Paths.get(log_path).toString(), true);
             BufferedWriter writer = new BufferedWriter(fileOpener);
